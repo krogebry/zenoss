@@ -20,7 +20,7 @@
 #
 
 case node['platform']
-when "centos","redhat","scientific"
+when "amazon","centos","redhat","scientific"
   package "libgcj" #moved here to make CentOS 5.6 happy (COOK-908)
 
   yum_key "RPM-GPG-KEY-zenoss" do
@@ -106,7 +106,7 @@ service "zenoss" do
   case node["platform"]
   when "debian", "ubuntu"
     service_name "zenoss-stack"
-  when "redhat", "centos", "scientific"
+  when "redhat", "centos", "scientific", "amazon"
     service_name "zenoss"
   end
   action [:enable, :start ]

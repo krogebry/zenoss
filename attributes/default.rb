@@ -33,7 +33,7 @@ default['zenoss']['server']['zenoss_pubkey']   = "" #gets set in the server reci
 case node['platform']
 when "ubuntu","debian"
   default['zenoss']['server']['zenhome']         = "/usr/local/zenoss/zenoss" #RPM is different
-when "redhat","centos","scientific"
+when "redhat","centos","scientific","amazon"
   default['zenoss']['server']['zenhome']         = "/opt/zenoss" #RPM is different
 end
 
