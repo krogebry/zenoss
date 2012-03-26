@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-case node[:platform]
+case node['platform']
 when "centos","redhat","scientific"
   package "libgcj" #moved here to make CentOS 5.6 happy (COOK-908)
 
@@ -120,7 +120,7 @@ end
 
 #use zendmd to set the admin password
 zenoss_zendmd "set admin pass" do
-  command "app.acl_users.userManager.updateUserPassword('admin', '#{node[:zenoss][:server][:admin_password]}')"
+  command "app.acl_users.userManager.updateUserPassword('admin', '#{node['zenoss']['server']['admin_password']}')"
   action :run
 end
 
@@ -170,11 +170,11 @@ end
 
 #move the localhost to SSH monitoring since we're not using SNMP
 zenoss_zendmd "move Zenoss server" do
-  batch = "dev = dmd.Devices.findDevice('#{node[:fqdn]}')\n"
+  batch = "dev = dmd.Devices.findDevice('#{node['fqdn']}')\n"
   batch += "if not dev:\n"
   batch += "    dev = dmd.Devices.findDevice('localhost*')\n\n"
   batch += "dev.changeDeviceClass('/Server/SSH/Linux')\n"
-  batch += "dev.setManageIp('#{node[:ipaddress]}')"
+  batch += "dev.setManageIp('#{node['ipaddress']}')"
   command batch
   action :run
 end

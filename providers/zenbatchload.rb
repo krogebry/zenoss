@@ -102,11 +102,11 @@ action :run do
   execute "zenbatchload" do
     user "zenoss"
     environment ({
-        'LD_LIBRARY_PATH' => "#{node[:zenoss][:server][:zenhome]}/lib",
-        'PYTHONPATH' => "#{node[:zenoss][:server][:zenhome]}/lib/python",
-        'ZENHOME' => node[:zenoss][:server][:zenhome]
+        'LD_LIBRARY_PATH' => "#{node['zenoss']['server']['zenhome']}/lib",
+        'PYTHONPATH' => "#{node['zenoss']['server']['zenhome']}/lib/python",
+        'ZENHOME' => node['zenoss']['server']['zenhome']
       })
-    command "#{node[:zenoss][:server][:zenhome]}/bin/zenbatchload /tmp/chefzenbatch.batch"
+    command "#{node['zenoss']['server']['zenhome']}/bin/zenbatchload /tmp/chefzenbatch.batch"
     action :run
   end
 end

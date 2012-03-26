@@ -105,15 +105,15 @@ This cookbook provides a number of example roles for mapping attributes to Zenos
 
 Device Class Roles
 ------------------
-* Roles intended to map to Device Classes set the attribute `[:zenoss][:device][:device_class]`. This is an override_attribute on the role.
-* Roles may set default attributes for `[:zenoss][:device][:modeler_plugins]`, `[:zenoss][:device][:templates]` and `[:zenoss][:device][:properties]` to be applied to the Device Class.
+* Roles intended to map to Device Classes set the attribute `['zenoss']['device']['device_class']`. This is an override_attribute on the role.
+* Roles may set default attributes for `['zenoss']['device']['modeler_plugins']`, `['zenoss']['device']['templates']` and `['zenoss']['device']['properties']` to be applied to the Device Class.
 * The `name` for the role is unused by Zenoss.
 * Nodes may only belong to a single Device Class, nodes that belong to multiple Device Class roles will have non-determinant membership in a single Device Class.
 
 Location Roles
 --------------
-* Roles intended to map to Locations set the attribute `[:zenoss][:device][:location]`. This is an override_attribute on the role.
-* Location roles may set the have `[:zenoss][:device][:address]` attribute for the Google map address. If you are using a newline, make sure it is entered as `\\n` in the role. This is an override_attribute on the role.
+* Roles intended to map to Locations set the attribute `['zenoss']['device']['location']`. This is an override_attribute on the role.
+* Location roles may set the have `['zenoss']['device']['address']` attribute for the Google map address. If you are using a newline, make sure it is entered as `\\n` in the role. This is an override_attribute on the role.
 * The `name` and the `description` for the role map to the name and description of the Location.
 * Nodes may only belong to a single Location, nodes that belong to multiple Location roles will have non-determinant membership in a single Location.
 
