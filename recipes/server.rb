@@ -161,7 +161,7 @@ end
 
 #this list should get appended by other recipes
 node["zenoss"]["server"]["installed_zenpacks"].each do |package, zpversion|
-  zenoss_zenpack "#{package}" do
+  zenoss_zenpack package do
     version zpversion
     action :install
     notifies :restart, resources(:service => "zenoss"), :immediate

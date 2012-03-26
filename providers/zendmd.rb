@@ -1,7 +1,7 @@
 #runs a command via zendmd
 action :run do
   Chef::Log.info "zenoss_zendmd:#{new_resource.name}"
-  Chef::Log.debug "#{new_resource.command}"
+  Chef::Log.debug new_resource.command
   #write the content to a temp file
   dmdscript = "#{rand(1000000)}.dmd"
   file "/tmp/#{dmdscript}" do
