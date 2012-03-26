@@ -9,3 +9,8 @@ attribute :properties, :kind_of => Hash, :default => {}
 attribute :location, :kind_of => String
 attribute :address, :kind_of => String
 attribute :users, :kind_of => Array, :default => []
+
+def initialize(*args)
+  super
+  @action = :run
+end
