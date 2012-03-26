@@ -38,21 +38,26 @@ directory "/home/zenoss/.ssh" do
 end
 
 #get the zenoss user public key via search
-server = search(:node, 'recipes:zenoss\:\:server') || []
-if server.length > 0
-  zenoss = server[0]["zenoss"]
-  if zenoss["server"] and zenoss["server"]["zenoss_pubkey"]
-    pubkey = zenoss["server"]["zenoss_pubkey"]
-    file "/home/zenoss/.ssh/authorized_keys" do
-      backup false
-      owner "zenoss"
-      mode "0600"
-      content pubkey
-      action :create
+server = []
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  server = search(:node, 'recipes:zenoss\:\:server') || []
+  if server.length > 0
+    zenoss = server[0]["zenoss"]
+    if zenoss["server"] and zenoss["server"]["zenoss_pubkey"]
+      pubkey = zenoss["server"]["zenoss_pubkey"]
+      file "/home/zenoss/.ssh/authorized_keys" do
+        backup false
+        owner "zenoss"
+        mode "0600"
+        content pubkey
+        action :create
+      end
+    else
+      Chef::Log.info("No Zenoss server found, device is unmonitored.")
     end
   else
     Chef::Log.info("No Zenoss server found, device is unmonitored.")
   end
-else
-  Chef::Log.info("No Zenoss server found, device is unmonitored.")
 end

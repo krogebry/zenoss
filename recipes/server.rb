@@ -125,11 +125,17 @@ zenoss_zendmd "set admin pass" do
 end
 
 #search the 'users' databag and pull out sysadmins for users and groups
-begin
-  admins = search(:users, 'groups:sysadmin') || []
-rescue
-  admins = []
+admins = []
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  begin
+    admins = search(:users, 'groups:sysadmin') || []
+  rescue
+    admins = []
+  end
 end
+
 zenoss_zendmd "add users" do
   users admins
   action :users
@@ -183,34 +189,43 @@ end
 devices = {}
 locations = {}
 groups = {}
-search(:role, "*:*").each do |role|
-  if role.override_attributes['zenoss'] and role.override_attributes['zenoss']['device']
-    if role.override_attributes['zenoss']['device']['device_class']
-      #add the role as a Device Class
-      Chef::Log.debug "deviceclass from role:#{role.name}:#{role.override_attributes['zenoss']['device']['device_class']}"
-      devices[role.override_attributes['zenoss']['device']['device_class']] = {
-        'description' => role.description,
-        'modeler_plugins' => role.default_attributes['zenoss']['device']['modeler_plugins'],
-        'templates' => role.default_attributes['zenoss']['device']['templates'],
-        'properties' => role.default_attributes['zenoss']['device']['properties'],
-        'nodes' => []
-      }
-    elsif role.override_attributes['zenoss']['device']['location']
-      #add the role as a Location
-      locations[role.name] = {
-        'location' => role.override_attributes['zenoss']['device']['location'],
-        'description' => role.description,
-        'address' => role.override_attributes['zenoss']['device']['address']
-      }
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  search(:role, "*:*").each do |role|
+    if role.override_attributes['zenoss'] and role.override_attributes['zenoss']['device']
+      if role.override_attributes['zenoss']['device']['device_class']
+        #add the role as a Device Class
+        Chef::Log.debug "deviceclass from role:#{role.name}:#{role.override_attributes['zenoss']['device']['device_class']}"
+        devices[role.override_attributes['zenoss']['device']['device_class']] = {
+          'description' => role.description,
+          'modeler_plugins' => role.default_attributes['zenoss']['device']['modeler_plugins'],
+          'templates' => role.default_attributes['zenoss']['device']['templates'],
+          'properties' => role.default_attributes['zenoss']['device']['properties'],
+          'nodes' => []
+        }
+      elsif role.override_attributes['zenoss']['device']['location']
+        #add the role as a Location
+        locations[role.name] = {
+          'location' => role.override_attributes['zenoss']['device']['location'],
+          'description' => role.description,
+          'address' => role.override_attributes['zenoss']['device']['address']
+        }
+      end
+    else
+      #create Groups for the rest of the roles
+      groups[role.name] = {'description' => role.description}
     end
-  else
-    #create Groups for the rest of the roles
-    groups[role.name] = {'description' => role.description}
   end
 end
 
 #all nodes with zenoss:device
-nodes = search(:node, 'zenoss:device*') || []
+nodes = []
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  nodes = search(:node, 'zenoss:device*') || []
+end
 #find the recipes and create Systems for them
 systems = []
 nodes.each {|node| systems.push(node.expand!.recipes)}
