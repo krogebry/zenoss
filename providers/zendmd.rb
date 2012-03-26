@@ -27,6 +27,7 @@ action :run do
   file "/tmp/#{dmdscript}" do
     action :delete
   end
+  new_resource.updated_by_last_action(true)
 end
 
 #based on Device Class roles
@@ -57,6 +58,7 @@ action :deviceclass do
     command command
     action :run
   end
+  new_resource.updated_by_last_action(true)
 end
 
 #based on Location roles
@@ -71,6 +73,7 @@ action :location do
     command command
     action :run
   end
+  new_resource.updated_by_last_action(true)
 end
 
 #all non Device Class or Location roles
@@ -82,6 +85,7 @@ action :group do
     command command
     action :run
   end
+  new_resource.updated_by_last_action(true)
 end
 
 #based on recipes used by nodes
@@ -92,6 +96,7 @@ action :system do
     command command
     action :run
   end
+  new_resource.updated_by_last_action(true)
 end
 
 action :users do
@@ -126,4 +131,5 @@ action :users do
     command command
     action :run
   end
+  new_resource.updated_by_last_action(true)
 end

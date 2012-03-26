@@ -11,6 +11,7 @@ action :install do
       environment ({'ZENHOME' => node['zenoss']['server']['zenhome']})
       action :run
     end
+    new_resource.updated_by_last_action(true)
   end
 end
 

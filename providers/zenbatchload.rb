@@ -109,5 +109,6 @@ action :run do
     command "#{node['zenoss']['server']['zenhome']}/bin/zenbatchload /tmp/chefzenbatch.batch"
     action :run
   end
+  new_resource.updated_by_last_action(true)
 end
 
