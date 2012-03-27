@@ -4,7 +4,7 @@ action :run do
   Chef::Log.debug new_resource.command
   #write the content to a temp file
   dmdscript = "#{rand(1000000)}.dmd"
-  file "/tmp/#{dmdscript}" do
+  file "#{Chef::Config[:file_cache_path]}/#{dmdscript}" do
     backup false
     owner "zenoss"
     mode "0600"
@@ -14,7 +14,7 @@ action :run do
   #run the command as the zenoss user
   execute "zendmd" do
     user "zenoss"
-    cwd "/tmp"
+    cwd Chef::Config[:file_cache_path]
     environment ({
                    'LD_LIBRARY_PATH' => "#{node['zenoss']['server']['zenhome']}/lib",
                    'PYTHONPATH' => "#{node['zenoss']['server']['zenhome']}/lib/python",
@@ -24,7 +24,7 @@ action :run do
     action :run
   end
   #remove the temp file
-  file "/tmp/#{dmdscript}" do
+  file "#{Chef::Config[:file_cache_path]}/#{dmdscript}" do
     action :delete
   end
   new_resource.updated_by_last_action(true)

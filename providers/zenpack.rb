@@ -27,7 +27,7 @@ action :install do
     zpfile = "#{new_resource.package}-#{new_resource.version}-#{new_resource.py_version}.egg"
     Chef::Log.info "Installing the #{zpfile} ZenPack."
     #download the ZenPack
-    remote_file "/tmp/#{zpfile}" do
+    remote_file "#{Chef::Config[:file_cache_path]}/#{zpfile}" do
       source "http://dev.zenoss.com/zenpacks/#{zpfile}"
       mode "0644"
       action :create
@@ -35,7 +35,7 @@ action :install do
     #install the ZenPack
     execute "zenpack --install" do
       user "zenoss"
-      cwd "/tmp"
+      cwd Chef::Config[:file_cache_path]
       environment ({
                      'LD_LIBRARY_PATH' => "#{node['zenoss']['server']['zenhome']}/lib",
                      'PYTHONPATH' => "#{node['zenoss']['server']['zenhome']}/lib/python",
