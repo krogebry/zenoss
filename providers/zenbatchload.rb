@@ -7,18 +7,18 @@ action :run do
   batch = ""
 
   #sort the groups and write them out
-  groups.keys.sort!.each do |group|
+  groups.keys.sort.each do |group|
     Chef::Log.debug "zenbatchload group:#{group}"
     batch += "\"/Groups/#{group}\""
     batch += " description=\"#{groups[group]['description']}\"\n"
   end
   #sort the systems and write them out
-  systems.sort!.each do |system|
+  systems.sort.each do |system|
     Chef::Log.debug "zenbatchload system:#{system}"
     batch += "\"/Systems/#{system}\"\n"
   end
   #sort the locations and write them out
-  locations.keys.sort!.each do |location|
+  locations.keys.sort.each do |location|
     Chef::Log.debug "zenbatchload location:#{location}"
     batch += "\"/Locations/#{location}\""
     batch += " description=\"#{locations[location]['description']}\""
@@ -26,7 +26,7 @@ action :run do
   end
 
   #load the devices by device class
-  devices.keys.sort!.each do |dclass|
+  devices.keys.sort.each do |dclass|
     Chef::Log.debug "zenbatchload deviceclass:#{dclass}"
     batch += "\"/Devices#{dclass}\""
     #write out any settings for the device class
@@ -63,7 +63,7 @@ action :run do
       #set the Location & Groups
       devlocation = ""
       devgroups = "setGroups=["
-      device.roles.sort!.each do |role|
+      device.roles.sort.each do |role|
         if locations.member?(role)
           devlocation = "setLocation=\"/#{role}\", "
         elsif groups.member?(role)
@@ -76,7 +76,7 @@ action :run do
       batch += devgroups
       #set the Systems
       devsystems = "setSystems=["
-      dsystems = device.expand!.recipes.sort!
+      dsystems = device.expand!.recipes.sort
       dsystems.collect! {|sys| sys.gsub('::', '/')}
       dsystems.each {|sys| devsystems += "\"/#{sys}\","}
       devsystems += "], "
